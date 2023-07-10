@@ -5,8 +5,9 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
+   
 jobs:
+  
   build:
 
     runs-on: ubuntu-latest
@@ -19,6 +20,18 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: gradle
+    - name: Create Local Properties
+      run: touch local.properties
+      
+    - name: Decode Spotify Client ID
+      env:
+        SPOTIFYCLIENTID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+      run: echo SPOTIFY_CLIENT_ID="$SPOTIFYCLIENTID" > ./local.properties
+      
+    - name: Decode Spotify Client Secret
+      env:
+        SPOTIFYCLIENTSECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      run: echo SPOTIFY_CLIENT_SECRET="$SPOTIFYCLIENTSECRET" > ./local.properties
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
